@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>CVLeo · Portfolio — Leonardo Alvarado</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    --accent: #E50914;
+    --accent-soft: #ff2a36;
+    --bg: #0a0a0b;
+    --bg-2: #121214;
+    --bg-3: #1a1a1d;
+    --line: rgba(255,255,255,0.08);
+    --fg: #f5f5f7;
+    --fg-dim: rgba(245,245,247,0.62);
+    --fg-mute: rgba(245,245,247,0.38);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font-family: 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ============ TOP BAR ============ */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: 68px; z-index: 100;
+    display: flex; align-items: center; padding: 0 40px;
+    background: linear-gradient(180deg, rgba(10,10,11,0.92) 0%, rgba(10,10,11,0.55) 70%, rgba(10,10,11,0) 100%);
+    transition: background 0.3s;
+  }
+  .topbar.scrolled { background: rgba(10,10,11,0.95); border-bottom: 1px solid var(--line); }
+  .brand {
+    font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.14em;
+    color: var(--fg); display: flex; align-items: center; gap: 10px;
+  }
+  .brand-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 18px var(--accent); }
+  .nav { display: flex; gap: 28px; margin-left: 48px; }
+  .nav a {
+    font-size: 13px; color: var(--fg-dim); letter-spacing: 0.02em;
+    font-weight: 500; transition: color 0.15s;
+  }
+  .nav a:hover, .nav a.active { color: var(--fg); }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 22px; }
+  .lang-toggle {
+    display: inline-flex; background: rgba(255,255,255,0.06); border: 1px solid var(--line);
+    border-radius: 999px; padding: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  }
+  .lang-toggle button {
+    background: transparent; border: 0; color: var(--fg-dim); padding: 5px 12px; border-radius: 999px;
+    cursor: pointer; font-family: inherit; font-size: inherit; letter-spacing: 0.08em;
+  }
+  .lang-toggle button.active { background: var(--fg); color: var(--bg); }
+  .contact-btn {
+    background: var(--accent); color: var(--fg); border: 0; padding: 8px 16px; border-radius: 4px;
+    font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.15s, transform 0.15s;
+  }
+  .contact-btn:hover { background: var(--accent-soft); }
+
+  /* ============ LEFT RAIL (mini tag) ============ */
+  .rail {
+    position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+    writing-mode: vertical-rl; transform-origin: center; transform: translateY(-50%) rotate(180deg);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.3em;
+    color: var(--fg-mute); padding: 20px 12px; z-index: 10;
+  }
+  .rail span { color: var(--accent); }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative; min-height: 92vh; padding: 96px 80px 60px 80px;
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: center;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 75% 40%, rgba(229,9,20,0.12) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 180px;
+    background: linear-gradient(180deg, transparent, var(--bg));
+    pointer-events: none;
+  }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.32em;
+    color: var(--accent); margin-bottom: 28px; font-weight: 600;
+  }
+  .hero-label::before {
+    content: ''; width: 32px; height: 1px; background: var(--accent);
+  }
+  .hero-name {
+    font-family: 'Caveat', cursive; font-size: clamp(64px, 8.2vw, 132px); line-height: 0.88;
+    color: var(--fg); letter-spacing: -0.01em; margin-bottom: 4px;
+    text-shadow: 0 8px 40px rgba(0,0,0,0.7);
+    white-space: nowrap;
+  }
+  .hero-name em { font-style: normal; display: block; padding-left: 0.6em; color: var(--fg); }
+  .hero-kicker {
+    font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.18em;
+    color: var(--fg-dim); margin: 18px 0 20px 0;
+  }
+  .hero-kicker b { color: var(--fg); font-weight: 400; }
+  .hero-blurb {
+    max-width: 520px; font-size: 15px; line-height: 1.62; color: var(--fg-dim);
+    margin-bottom: 32px;
+  }
+  .hero-buttons { display: flex; gap: 12px; }
+  .btn-hero {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 26px; border-radius: 5px; font-size: 15px; font-weight: 600;
+    border: 0; cursor: pointer; transition: all 0.15s; font-family: inherit;
+  }
+  .btn-primary { background: var(--fg); color: var(--bg); }
+  .btn-primary:hover { background: rgba(255,255,255,0.85); }
+  .btn-ghost { background: rgba(255,255,255,0.12); color: var(--fg); backdrop-filter: blur(8px); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.22); }
+  .play-ico { width: 14px; height: 16px; }
+
+  .hero-photo {
+    position: relative; aspect-ratio: 3/4; max-height: 72vh;
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    background: linear-gradient(180deg, #1e1f22, #0d0e10);
+  }
+  .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+  .hero-photo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(10,10,11,0.4) 100%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    position: absolute; top: 24px; left: 24px; padding: 6px 12px;
+    background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em;
+    color: var(--fg); text-transform: uppercase;
+  }
+  .hero-stats {
+    position: absolute; bottom: 24px; left: 24px; right: 24px;
+    display: flex; gap: 24px; font-family: 'JetBrains Mono', monospace;
+  }
+  .hero-stat { color: var(--fg); }
+  .hero-stat b { display: block; font-size: 22px; font-weight: 600; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; }
+  .hero-stat span { font-size: 10px; color: var(--fg-dim); letter-spacing: 0.2em; }
+
+  /* ============ ROW / SHELVES ============ */
+  .row-section { padding: 28px 0 40px 0; }
+  .row-head { display: flex; align-items: baseline; justify-content: space-between; padding: 0 80px; margin-bottom: 16px; }
+  .row-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.08em; color: var(--fg);
+  }
+  .row-title .red { color: var(--accent); }
+  .row-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: var(--fg-mute);
+  }
+  .row-scroller {
+    display: flex; gap: 14px; padding: 10px 80px 20px 80px;
+    overflow-x: auto; scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+  .row-scroller::-webkit-scrollbar { display: none; }
+
+  /* ============ CARDS (bio items) ============ */
+  .card {
+    flex: 0 0 auto; width: 224px; border-radius: 6px; overflow: hidden;
+    background: var(--bg-2); border: 1px solid var(--line);
+    transition: transform 0.28s cubic-bezier(.2,.7,.3,1), box-shadow 0.28s, border-color 0.28s;
+    cursor: pointer; position: relative; scroll-snap-align: start;
+    transform-origin: center;
+  }
+  .card:hover {
+    transform: scale(1.08); box-shadow: 0 24px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(229,9,20,0.4);
+    border-color: transparent; z-index: 5;
+  }
+  .card-img { aspect-ratio: 16/20; background-size: cover; background-position: center; }
+  .card-body { padding: 14px 16px 16px; }
+  .card-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.22em;
+    color: var(--accent); font-weight: 600; margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.06em;
+    margin-bottom: 4px; color: var(--fg);
+  }
+  .card-sub { font-size: 11px; color: var(--fg-dim); letter-spacing: 0.04em; }
+
+  /* ============ VIDEO CARDS (portfolio rows) ============ */
+  .video-section {
+    margin-top: 40px; padding: 60px 0 40px 0;
+    background: linear-gradient(180deg, var(--bg) 0%, #060607 50%, var(--bg) 100%);
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .video-section-head {
+    padding: 0 80px; margin-bottom: 8px;
+  }
+  .video-section-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 56px; letter-spacing: 0.04em;
+    line-height: 1; margin-bottom: 8px;
+  }
+  .video-section-title .red { color: var(--accent); font-style: italic; font-family: 'Caveat', cursive; font-size: 58px; letter-spacing: 0; }
+  .video-section-sub {
+    font-size: 14px; color: var(--fg-dim); max-width: 540px; line-height: 1.55; margin-bottom: 28px;
+  }
+
+  .video-card {
+    flex: 0 0 auto; width: 380px; aspect-ratio: 16/9;
+    border-radius: 8px; overflow: hidden; position: relative;
+    cursor: pointer; scroll-snap-align: start;
+    transition: transform 0.3s cubic-bezier(.2,.7,.3,1), box-shadow 0.3s;
+    background: #0a0a0b;
+    transform-origin: center;
+  }
+  .video-card:hover {
+    transform: scale(1.08); box-shadow: 0 30px 70px rgba(0,0,0,0.8), 0 0 0 2px rgba(229,9,20,0.5);
+    z-index: 10;
+  }
+  .video-card video, .video-card .video-poster {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    background-size: cover; background-position: center;
+  }
+  .video-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.85) 100%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 18px; opacity: 1; transition: opacity 0.2s;
+  }
+  .video-meta {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-dim);
+  }
+  .video-views { display: inline-flex; align-items: center; gap: 5px; }
+  .video-views::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .video-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.04em; color: var(--fg);
+    line-height: 1.05;
+  }
+  .video-client {
+    font-size: 11px; color: var(--fg-mute); letter-spacing: 0.18em; font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase; margin-top: 4px;
+  }
+  .video-play-badge {
+    position: absolute; top: 14px; right: 14px; padding: 4px 8px;
+    background: rgba(0,0,0,0.7); border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--fg);
+    letter-spacing: 0.1em;
+  }
+
+  /* ============ ABOUT / TOOLKIT SECTION ============ */
+  .about {
+    padding: 80px 80px 40px 80px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+  }
+  .about-heading {
+    font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.06em;
+    margin-bottom: 20px;
+  }
+  .about-heading .red { color: var(--accent); }
+  .about-body { font-size: 15px; line-height: 1.72; color: var(--fg-dim); max-width: 520px; }
+  .about-body p + p { margin-top: 14px; }
+  .skills-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; margin-top: 20px;
+  }
+  .skill {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--fg); padding: 6px 0; border-bottom: 1px solid var(--line);
+  }
+  .skill::before {
+    content: '▸'; color: var(--accent); font-size: 10px;
+  }
+  .toolkit-title {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.25em;
+    color: var(--fg-mute); margin-bottom: 14px; margin-top: 36px;
+  }
+  .tools {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .tool {
+    padding: 5px 10px; background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 3px; font-size: 11px; color: var(--fg-dim); font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ============ CONTACT FOOTER ============ */
+  footer {
+    padding: 80px 80px 40px; border-top: 1px solid var(--line); margin-top: 40px;
+    display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: end;
+  }
+  .foot-big {
+    font-family: 'Caveat', cursive; font-size: 56px; line-height: 1.1; color: var(--fg);
+    padding-bottom: 0.15em;
+  }
+  .foot-big b { color: var(--accent); font-weight: 400; }
+  .foot-sub { color: var(--fg-dim); font-size: 14px; margin-top: 24px; max-width: 460px; line-height: 1.55; }
+  .foot-links { display: flex; flex-direction: column; gap: 10px; text-align: right; }
+  .foot-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--fg);
+    display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end;
+    transition: color 0.15s;
+  }
+  .foot-link:hover { color: var(--accent); }
+  .foot-link small { color: var(--fg-mute); font-size: 10px; letter-spacing: 0.2em; display: block; margin-bottom: 2px; }
+  .foot-bottom {
+    grid-column: 1 / -1; margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--fg-mute); letter-spacing: 0.16em;
+  }
+
+  /* ============ MODAL ============ */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+    z-index: 200; display: none; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .modal-backdrop.open { display: flex; opacity: 1; }
+  .modal {
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: 10px;
+    width: min(900px, 92vw); max-height: 88vh; overflow: hidden; position: relative;
+  }
+  .modal-video { background: #000; width: 100%; display: flex; align-items: center; justify-content: center; min-height: 500px; max-height: 72vh; overflow: auto; }
+  .modal-video video { width: 100%; height: 100%; object-fit: contain; }
+  .modal-video iframe { border: 0; background: #000; display: block; }
+  .modal-video .ig-wrap { width: 100%; max-width: 540px; padding: 16px 0; }
+  .modal-video .ig-wrap blockquote { margin: 0 auto !important; min-width: 326px !important; max-width: 540px !important; width: calc(100% - 2px) !important; background: #fff; border: 0; border-radius: 3px; box-shadow: 0 0 1px rgba(0,0,0,0.5), 0 1px 10px rgba(0,0,0,0.15); }
+  .modal-video .tiktok-wrap { width: 325px; }
+  .modal-video .coming-soon { color: var(--fg-dim); text-align: center; padding: 60px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.1em; }
+  .modal-open-original { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; padding: 8px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--line); border-radius: 4px; color: var(--fg); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; transition: background 0.15s; }
+  .modal-open-original:hover { background: rgba(229,9,20,0.2); border-color: var(--accent); }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px; width: 36px; height: 36px;
+    background: rgba(0,0,0,0.6); border: 1px solid var(--line); border-radius: 50%;
+    color: var(--fg); cursor: pointer; font-size: 18px; z-index: 3;
+  }
+  .modal-body { padding: 24px 28px; }
+  .modal-body h3 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .modal-body .meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--fg-dim); letter-spacing: 0.18em; margin-bottom: 12px; }
+  .modal-body p { font-size: 14px; color: var(--fg-dim); line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 40px; }
+    .hero-photo { max-height: 60vh; }
+    .row-head, .row-scroller, .video-section-head, .about { padding-left: 24px; padding-right: 24px; }
+    .row-scroller { padding-left: 24px; padding-right: 24px; }
+    .about { grid-template-columns: 1fr; gap: 32px; }
+    footer { grid-template-columns: 1fr; padding: 60px 24px 30px; }
+    .foot-links { text-align: left; align-items: flex-start; }
+    .foot-link { justify-content: flex-start; }
+    .nav { display: none; }
+    .rail { display: none; }
+    .video-card { width: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar" id="topbar">
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span>CV<strong style="font-weight:400;color:var(--accent)">LEO</strong></span>
+  </div>
+  <nav class="nav">
+    <a href="#hero" class="active" data-es="Inicio" data-en="Home">Inicio</a>
+    <a href="#experience" data-es="Experiencia" data-en="Experience">Experiencia</a>
+    <a href="#portfolio" data-es="Portafolio" data-en="Portfolio">Portafolio</a>
+    <a href="#about" data-es="Sobre mí" data-en="About">Sobre mí</a>
+  </nav>
+  <div class="topbar-right">
+    <div class="lang-toggle" role="tablist">
+      <button class="active" data-lang="es">ES</button>
+      <button data-lang="en">EN</button>
+    </div>
+    <button class="contact-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" data-es="Contacto" data-en="Get in touch">Contacto</button>
+  </div>
+</header>
+
+<div class="rail">LEONARDO ALVARADO · <span>PORTFOLIO 2026</span></div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div>
+    <div class="hero-label" data-es="SERIE ORIGINAL · CAPÍTULO 07" data-en="ORIGINAL SERIES · CHAPTER 07">SERIE ORIGINAL · CAPÍTULO 07</div>
+    <h1 class="hero-name">
+      Leonardo
+      <em>Alvarado</em>
+    </h1>
+    <p class="hero-kicker" data-es="MARKETING MANAGER · <b>VIDEO EDITOR</b> · CONTENT CREATOR" data-en="MARKETING MANAGER · <b>VIDEO EDITOR</b> · CONTENT CREATOR">
+      MARKETING MANAGER · <b>VIDEO EDITOR</b> · CONTENT CREATOR
+    </p>
+    <p class="hero-blurb" data-es="Un joven emprendedor moviéndose a una nueva ciudad, buscando la oportunidad de su vida en una compañía que podría cambiarla. Storytelling, brand growth y producción audiovisual — combinando pensamiento estratégico con fluidez cultural y una profunda pasión por contar historias." data-en="A young entrepreneur moving to a brand new city, seeking an opportunity of a lifetime at a company that might change his life. Storytelling, brand growth & audiovisual production — combining strategic thinking with cultural fluency and a deep passion for storytelling.">
+      Un joven emprendedor moviéndose a una nueva ciudad, buscando la oportunidad de su vida en una compañía que podría cambiarla. Storytelling, brand growth y producción audiovisual — combinando pensamiento estratégico con fluidez cultural y una profunda pasión por contar historias.
+    </p>
+    <div class="hero-buttons">
+      <button class="btn-hero btn-primary" onclick="document.getElementById('portfolio').scrollIntoView({behavior:'smooth'})">
+        <svg class="play-ico" viewBox="0 0 14 16"><polygon points="0,0 14,8 0,16" fill="currentColor"/></svg>
+        <span data-es="Reproducir" data-en="Play">Reproducir</span>
+      </button>
+      <button class="btn-hero btn-ghost" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><line x1="8" y1="7" x2="8" y2="11.5"/><circle cx="8" cy="4.6" r="0.9" fill="currentColor" stroke="none"/></svg>
+        <span data-es="Más información" data-en="More info">Más información</span>
+      </button>
+    </div>
+  </div>
+  <div class="hero-photo">
+    <div class="hero-badge" data-es="SINGLE TAKE · LIVE" data-en="SINGLE TAKE · LIVE">SINGLE TAKE · LIVE</div>
+    <img src="assets/hero_leo.png" alt="Leonardo Alvarado">
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <b>7+</b>
+        <span data-es="AÑOS EXP." data-en="YEARS EXP.">AÑOS EXP.</span>
+      </div>
+      <div class="hero-stat">
+        <b>$500K</b>
+        <span data-es="MXN GENERADOS" data-en="MXN GENERATED">MXN GENERADOS</span>
+      </div>
+      <div class="hero-stat">
+        <b>1.5M</b>
+        <span data-es="VIEWS PROM." data-en="AVG. VIEWS">VIEWS PROM.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAST EXPERIENCE ROW -->
+<section class="row-section" id="experience">
+  <div class="row-head">
+    <div class="row-title"><span class="red">01 ·</span> <span data-es="EXPERIENCIA PREVIA" data-en="PAST EXPERIENCE">EXPERIENCIA PREVIA</span></div>
+    <div class="row-meta">04 <span data-es="EPISODIOS" data-en="EPISODES">EPISODIOS</span></div>
+  </div>
+  <div class="row-scroller">
+    <div class="card">
+      <div class="card-img" style="background-image:url('assets/exp_valkyr.png')"></div>
+      <div class="card-body">
+        <div class="card-tag">2025 — 2020 · FOUNDER</div>
+        <div class="card-title">House of Valkyr</div>
+        <div class="card-sub" data-es="Fitness Studio · Branding, growth, eventos" data-en="Fitness Studio · Branding, growth, events">Fitness Studio · Branding, growth, eventos</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background-image:url('assets/exp_ecolab.png?v=2')"></div>
+      <div class="card-body">
+        <div class="card-tag">2020 — 2019 · LATAM MKT</div>
+        <div class="card-title">Ecolab</div>
+        <div class="card-sub" data-es="Dashboard LATAM · Pricing & forecast" data-en="LATAM Dashboard · Pricing & forecast">Dashboard LATAM · Pricing & forecast</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background-image:url('assets/exp_unilever.png?v=2')"></div>
+      <div class="card-body">
+        <div class="card-tag">2019 — 2018 · HAIR CARE MKT</div>
+        <div class="card-title">Unilever</div>
+        <div class="card-sub" data-es="Sedal · Savilé · TRESemmé" data-en="Sedal · Savilé · TRESemmé">Sedal · Savilé · TRESemmé</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background-image:url('assets/exp_garnier.png?v=2')"></div>
+      <div class="card-body">
+        <div class="card-tag">2018 — 2017 · MKT MANAGER</div>
+        <div class="card-title">L'Oréal · Garnier</div>
+        <div class="card-sub" data-es="Campañas paid & owned · Amazon PDP" data-en="Paid & owned campaigns · Amazon PDP">Campañas paid & owned · Amazon PDP</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MILESTONES / EDUCATION ROW -->
+<section class="row-section" id="milestones">
+  <div class="row-head">
+    <div class="row-title"><span class="red">02 ·</span> <span data-es="MILESTONES & EDUCACIÓN" data-en="MILESTONES & EDUCATION">MILESTONES & EDUCACIÓN</span></div>
+    <div class="row-meta">04 <span data-es="CAPÍTULOS" data-en="CHAPTERS">CAPÍTULOS</span></div>
+  </div>
+  <div class="row-scroller">
+    <div class="card">
+      <div class="card-img" style="background-image:url('assets/edu_tec.png?v=2')"></div>
+      <div class="card-body">
+        <div class="card-tag">2020 · ITESM</div>
+        <div class="card-title">Tec de Monterrey</div>
+        <div class="card-sub" data-es="Marketing Graduate" data-en="Marketing Graduate">Marketing Graduate</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background-image:url('assets/edu_bishion.png')"></div>
+      <div class="card-body">
+        <div class="card-tag" data-es="2022 · EN CURSO" data-en="2022 · IN PROGRESS">2022 · EN CURSO</div>
+        <div class="card-title">Bishion School</div>
+        <div class="card-sub" data-es="Video & Animation Degree" data-en="Video & Animation Degree">Video & Animation Degree</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background-image:url('assets/edu_felipe.png?v=2')"></div>
+      <div class="card-body">
+        <div class="card-tag">2021 · FELIPE VERGARA</div>
+        <div class="card-title">Digital Marketing</div>
+        <div class="card-sub" data-es="Meta Ads · Google Ads · TikTok" data-en="Meta Ads · Google Ads · TikTok">Meta Ads · Google Ads · TikTok</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background-image:url('assets/edu_python.png?v=2')"></div>
+      <div class="card-body">
+        <div class="card-tag" data-es="2020 · AUTODIDACTA" data-en="2020 · SELF-TAUGHT">2020 · AUTODIDACTA</div>
+        <div class="card-title">Python</div>
+        <div class="card-sub" data-es="Data Science · Automation" data-en="Data Science · Automation">Data Science · Automation</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO VIDEOS -->
+<section class="video-section" id="portfolio">
+  <div class="video-section-head">
+    <h2 class="video-section-title">
+      <span data-es="MI" data-en="MY">MI</span> <span class="red" data-es="portafolio" data-en="portfolio">portafolio</span>
+    </h2>
+    <p class="video-section-sub" data-es="9 proyectos seleccionados como editor de video y content creator. Haz clic en cualquier tarjeta para reproducir." data-en="9 selected projects as video editor and content creator. Click any card to play.">
+      9 proyectos seleccionados como editor de video y content creator. Haz clic en cualquier tarjeta para reproducir.
+    </p>
+  </div>
+
+  <div id="video-rows"></div>
+</section>
+
+<!-- ABOUT / TOOLKIT -->
+<section class="about" id="about">
+  <div>
+    <h2 class="about-heading" data-es="Sobre <span class='red'>mí</span>" data-en="About <span class='red'>me</span>">Sobre <span class="red">mí</span></h2>
+    <p class="about-body" data-es="Marketer apasionado & emprendedor con más de 7 años de experiencia desde que me gradué del Tec de Monterrey. Mi trabajo se ha enfocado consistentemente en construir relevancia de marca e ideas creativas audaces para resolver problemas de negocio, especialmente en la industria del fitness." data-en="Passionate marketer & entrepreneur with over 7 years of experience since graduating from Tec de Monterrey. My work has consistently focused on building brand relevance and bold creative ideas for problem-solving in business, especially in the fitness industry.">
+      Marketer apasionado & emprendedor con más de 7 años de experiencia desde que me gradué del Tec de Monterrey. Mi trabajo se ha enfocado consistentemente en construir relevancia de marca e ideas creativas audaces para resolver problemas de negocio, especialmente en la industria del fitness.
+    </p>
+    <div class="skills-grid">
+      <div class="skill">Branding</div>
+      <div class="skill">Growth Strategy</div>
+      <div class="skill" data-es="Video & Content" data-en="Video & Content">Video & Content</div>
+      <div class="skill">Digital Advertising</div>
+      <div class="skill">Sales</div>
+      <div class="skill" data-es="Event Planning" data-en="Event Planning">Event Planning</div>
+    </div>
+  </div>
+  <div>
+    <div class="toolkit-title" data-es="// TOOLKIT" data-en="// TOOLKIT">// TOOLKIT</div>
+    <div class="tools">
+      <div class="tool">Premiere Pro</div>
+      <div class="tool">After Effects</div>
+      <div class="tool">DaVinci Resolve</div>
+      <div class="tool">Photoshop</div>
+      <div class="tool">Meta Ads Manager</div>
+      <div class="tool">ManyChat</div>
+      <div class="tool">Google Sheets</div>
+      <div class="tool">Notion</div>
+      <div class="tool">ChatGPT</div>
+      <div class="tool">Gemini AI</div>
+      <div class="tool">Higgsfield</div>
+      <div class="tool">GoHighLevel</div>
+      <div class="tool">Kommo CRM</div>
+    </div>
+
+    <div class="toolkit-title" style="margin-top:32px" data-es="// LOGROS" data-en="// HIGHLIGHTS">// LOGROS</div>
+    <ul style="list-style:none;padding:0;color:var(--fg-dim);font-size:14px;line-height:1.8">
+      <li data-es="↳ Llevé a House of Valkyr de $0 a $500K MXN en 12 meses" data-en="↳ Took House of Valkyr from $0 to $500K MXN in 12 months">↳ Llevé a House of Valkyr de $0 a $500K MXN en 12 meses</li>
+      <li data-es="↳ Rally x Zibatá — 100+ asistentes, sponsors y pipeline" data-en="↳ Rally x Zibatá — 100+ attendees, sponsors & lead pipeline">↳ Rally x Zibatá — 100+ asistentes, sponsors y pipeline</li>
+      <li data-es="↳ Dashboard LATAM unificado para Ecolab" data-en="↳ Unified LATAM dashboard for Ecolab">↳ Dashboard LATAM unificado para Ecolab</li>
+      <li data-es="↳ Activaciones de influencers en NYFW para L'Oréal" data-en="↳ Influencer activations at NYFW for L'Oréal">↳ Activaciones de influencers en NYFW para L'Oréal</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FOOTER / CONTACT -->
+<footer id="contact">
+  <div>
+    <div class="foot-big" data-es="Hablemos de tu <b>próximo proyecto</b>." data-en="Let's talk about your <b>next project</b>.">Hablemos de tu <b>próximo proyecto</b>.</div>
+    <p class="foot-sub" data-es="Gracias por considerar mi aplicación — me encantaría tener la oportunidad de conversar sobre cómo puedo contribuir a tu equipo." data-en="Thank you for considering my application — I'd love the opportunity to discuss how I can contribute to your team.">
+      Gracias por considerar mi aplicación — me encantaría tener la oportunidad de conversar sobre cómo puedo contribuir a tu equipo.
+    </p>
+  </div>
+  <div class="foot-links">
+    <a class="foot-link" href="mailto:infofitnessinabox@gmail.com">
+      <span>
+        <small>EMAIL</small>
+        infofitnessinabox@gmail.com
+      </span>
+    </a>
+    <a class="foot-link" href="tel:+525578453625">
+      <span>
+        <small>PHONE</small>
+        +52 55 7845 3625
+      </span>
+    </a>
+    <a class="foot-link" href="#" onclick="event.preventDefault()">
+      <span>
+        <small>INSTAGRAM</small>
+        @leo.alvarado
+      </span>
+    </a>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 LEONARDO ALVARADO · ALL RIGHTS RESERVED</span>
+    <span data-es="HECHO CON CAFÉ EN CDMX ☕" data-en="MADE WITH COFFEE IN MX ☕">HECHO CON CAFÉ EN CDMX ☕</span>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-video" id="modal-video-container"></div>
+    <div class="modal-body">
+      <h3 id="modal-title">—</h3>
+      <div class="meta" id="modal-meta">—</div>
+      <p id="modal-desc">—</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ DATA ============
+const VIDEO_ROWS = [
+  {
+    id: 'reels',
+    es: { title: 'Reels & Social', sub: 'Contenido vertical optimizado para IG, TikTok y Shorts' },
+    en: { title: 'Reels & Social', sub: 'Vertical content optimized for IG, TikTok and Shorts' },
+    videos: [
+      { platform: 'instagram', url: 'https://www.instagram.com/p/DN1GK1EXsis/', poster: 'assets/poster_1_1.jpg', es: { title: 'Reel 01', client: 'Instagram · Reels', desc: 'Pieza de contenido social optimizada para engagement orgánico.' }, en: { title: 'Reel 01', client: 'Instagram · Reels', desc: 'Social content piece optimized for organic engagement.' } },
+      { platform: 'instagram', url: 'https://www.instagram.com/p/DMntzQKJnh0/', poster: 'assets/poster_1_2.jpg', es: { title: 'Reel 02', client: 'Instagram · Reels', desc: 'Edición dinámica con hook inicial y CTA claro.' }, en: { title: 'Reel 02', client: 'Instagram · Reels', desc: 'Dynamic editing with opening hook and clear CTA.' } },
+      { platform: 'instagram', url: 'https://www.instagram.com/p/DMGOrBeJsie/', poster: 'assets/poster_1_3.jpg', es: { title: 'Reel 03', client: 'Instagram · Reels', desc: 'Storytelling visual con ritmo ágil y sound design.' }, en: { title: 'Reel 03', client: 'Instagram · Reels', desc: 'Visual storytelling with tight pacing and sound design.' } },
+    ]
+  },
+  {
+    id: 'brand',
+    es: { title: 'Brand Content', sub: 'Pokemex — contenido 100% producido con IA' },
+    en: { title: 'Brand Content', sub: 'Pokemex — fully AI produced content' },
+    videos: [
+      { platform: 'instagram', url: 'https://www.instagram.com/p/DXaIRgrDgty/', poster: 'assets/poster_2_1.jpg', es: { title: 'Pokemex 01', client: 'Pokemex', desc: 'Pokemex, a full AI produced content.' }, en: { title: 'Pokemex 01', client: 'Pokemex', desc: 'Pokemex, a full AI produced content.' } },
+      { platform: 'instagram', url: 'https://www.instagram.com/p/DV318bJj3gW/', poster: 'assets/poster_2_2.jpg', es: { title: 'Pokemex 02', client: 'Pokemex', desc: 'Pokemex, a full AI produced content.' }, en: { title: 'Pokemex 02', client: 'Pokemex', desc: 'Pokemex, a full AI produced content.' } },
+      { platform: 'instagram', url: 'https://www.instagram.com/p/DVOixd_ifbC/', poster: 'assets/poster_2_3.jpg', es: { title: 'Pokemex 03', client: 'Pokemex', desc: 'Pokemex, a full AI produced content.' }, en: { title: 'Pokemex 03', client: 'Pokemex', desc: 'Pokemex, a full AI produced content.' } },
+    ]
+  },
+  {
+    id: 'motion',
+    es: { title: 'Motion Graphics', sub: 'TikTok Live LATAM · producción y edición para campañas live' },
+    en: { title: 'Motion Graphics', sub: 'TikTok Live LATAM · production and editing for live campaigns' },
+    videos: [
+      { platform: 'tiktok', url: 'https://www.tiktok.com/@tiktoklive_latam/video/7517353014085176597', tiktokId: '7517353014085176597', poster: 'assets/poster_3_1.jpg', es: { title: 'TikTok Live 01', client: 'TikTok Live LATAM', desc: 'Pieza promocional para la plataforma de TikTok Live en LATAM.' }, en: { title: 'TikTok Live 01', client: 'TikTok Live LATAM', desc: 'Promotional piece for the TikTok Live platform in LATAM.' } },
+      { platform: 'tiktok', url: 'https://www.tiktok.com/@tiktoklive_latam/video/7519586329420696833', tiktokId: '7519586329420696833', poster: 'assets/poster_3_2.jpg', es: { title: 'TikTok Live 02', client: 'TikTok Live LATAM', desc: 'Segunda entrega de la serie de contenido para TikTok Live LATAM.' }, en: { title: 'TikTok Live 02', client: 'TikTok Live LATAM', desc: 'Second piece in the TikTok Live LATAM content series.' } },
+    ]
+  }
+];
+
+// fake view counters (deterministic from title)
+function fakeViews(seed) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) & 0xffffffff;
+  const n = Math.abs(h) % 900 + 100;
+  if (n > 750) return (n / 100).toFixed(1) + 'M views';
+  if (n > 100) return Math.floor(n * 2.3) + 'K views';
+  return n + ' views';
+}
+function fakeDate(seed) {
+  const days = [2, 5, 12, 21, 34, 55, 89, 144, 233];
+  let h = 0; for (let i = 0; i < seed.length; i++) h += seed.charCodeAt(i);
+  const d = days[h % days.length];
+  return d + (LANG === 'es' ? ' días' : ' days');
+}
+
+// ============ RENDER VIDEO ROWS ============
+let LANG = 'es';
+
+function renderVideoRows() {
+  const host = document.getElementById('video-rows');
+  host.innerHTML = '';
+  VIDEO_ROWS.forEach((row, rIdx) => {
+    const section = document.createElement('div');
+    section.className = 'row-section';
+    section.innerHTML = `
+      <div class="row-head">
+        <div class="row-title"><span class="red">0${rIdx+1} ·</span> ${row[LANG].title.toUpperCase()}</div>
+        <div class="row-meta">0${row.videos.length} ${LANG === 'es' ? 'PIEZAS' : 'PIECES'}</div>
+      </div>
+      <div class="row-scroller">
+        ${row.videos.map((v, vIdx) => `
+          <div class="video-card" data-row="${rIdx}" data-vid="${vIdx}">
+            <div class="video-poster" style="background-image:url('${v.poster}')"></div>
+            <div class="video-play-badge">${String(rIdx+1).padStart(2,'0')}.${String(vIdx+1).padStart(2,'0')}</div>
+            <div class="video-overlay">
+              <div class="video-meta">
+                <span class="video-views">${fakeViews(v[LANG].title + rIdx + vIdx)}</span>
+                <span>· ${fakeDate(v[LANG].title)}</span>
+              </div>
+              <div class="video-title">${v[LANG].title}</div>
+              <div class="video-client">${v[LANG].client}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    host.appendChild(section);
+  });
+
+  // attach click handlers
+  document.querySelectorAll('.video-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const r = +card.dataset.row, v = +card.dataset.vid;
+      openVideo(VIDEO_ROWS[r].videos[v]);
+    });
+  });
+}
+
+// ============ MODAL ============
+function openVideo(v) {
+  const data = v[LANG];
+  document.getElementById('modal-title').textContent = data.title;
+  document.getElementById('modal-meta').textContent = data.client.toUpperCase();
+  const descEl = document.getElementById('modal-desc');
+  descEl.innerHTML = '';
+  descEl.textContent = data.desc;
+  if (v.url) {
+    const a = document.createElement('a');
+    a.href = v.url; a.target = '_blank'; a.rel = 'noopener';
+    a.className = 'modal-open-original';
+    a.textContent = (LANG === 'es' ? 'Ver original ↗' : 'View original ↗');
+    descEl.appendChild(document.createElement('br'));
+    descEl.appendChild(a);
+  }
+  const container = document.getElementById('modal-video-container');
+  container.innerHTML = '';
+  if (v.platform === 'instagram') {
+    const wrap = document.createElement('div');
+    wrap.className = 'ig-wrap';
+    wrap.innerHTML = `<blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="${v.url}" data-instgrm-version="14"></blockquote>`;
+    container.appendChild(wrap);
+    if (window.instgrm && window.instgrm.Embeds) { window.instgrm.Embeds.process(); }
+    else {
+      const s = document.createElement('script'); s.async = true; s.src = 'https://www.instagram.com/embed.js';
+      document.body.appendChild(s);
+    }
+  } else if (v.platform === 'tiktok') {
+    const wrap = document.createElement('div');
+    wrap.className = 'tiktok-wrap';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.tiktok.com/embed/v2/${v.tiktokId}`;
+    iframe.width = 325; iframe.height = 740;
+    iframe.allow = 'encrypted-media; fullscreen';
+    iframe.frameBorder = 0;
+    wrap.appendChild(iframe);
+    container.appendChild(wrap);
+  } else if (v.platform === 'coming-soon') {
+    const d = document.createElement('div');
+    d.className = 'coming-soon';
+    d.textContent = LANG === 'es' ? 'PRÓXIMAMENTE · COMING SOON' : 'COMING SOON';
+    container.appendChild(d);
+  } else {
+    const video = document.createElement('video');
+    video.controls = true; video.playsInline = true;
+    video.src = v.src || ''; video.poster = v.poster;
+    container.appendChild(video);
+    try { video.play().catch(() => {}); } catch (e) {}
+  }
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-video-container').innerHTML = '';
+}
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target.id === 'modal') closeModal();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+// ============ LANGUAGE TOGGLE ============
+function applyLang(lang) {
+  LANG = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-es]').forEach(el => {
+    el.innerHTML = el.getAttribute('data-' + lang);
+  });
+  document.querySelectorAll('.lang-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  renderVideoRows();
+}
+document.querySelectorAll('.lang-toggle button').forEach(b => {
+  b.addEventListener('click', () => applyLang(b.dataset.lang));
+});
+
+// ============ TOPBAR SCROLL ============
+window.addEventListener('scroll', () => {
+  document.getElementById('topbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ============ INIT ============
+renderVideoRows();
+</script>
+</body>
+</html>
